@@ -6,7 +6,7 @@
 \alias{rokogiri-package}
 \title{An XML generator DSL in R, inspired by Ruby's Nokogiri.}
 \usage{
-rokogiri(expr, output_type = parent.frame())
+rokogiri(expr, output_type = "xml", enclos = parent.frame())
 }
 \arguments{
 \item{expr}{expression. The R expression to compile to XML.}
@@ -32,7 +32,7 @@ xml <- rokogiri({
     to("Tove")
     from("Jani")
     heading("Reminder")
-    body("Don't forget me this weekend!")
+    msg("Don't forget me this weekend!")
   })
 })
 
@@ -41,7 +41,7 @@ expected_xml <- "
     <to>Tove</to>
     <from>Jani</from>
     <heading>Reminder</heading>
-    <body>Don't forget me this weekend!</body>
+    <msg>Don't forget me this weekend!</msg>
   </note>
 "
 

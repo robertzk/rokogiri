@@ -13,7 +13,7 @@
 #'     to("Tove")
 #'     from("Jani")
 #'     heading("Reminder")
-#'     body("Don't forget me this weekend!")
+#'     msg("Don't forget me this weekend!")
 #'   })
 #' })
 #'
@@ -22,13 +22,13 @@
 #'     <to>Tove</to>
 #'     <from>Jani</from>
 #'     <heading>Reminder</heading>
-#'     <body>Don't forget me this weekend!</body>
+#'     <msg>Don't forget me this weekend!</msg>
 #'   </note>
 #' "
 #' 
 #' remove_spacing <- function(x) { gsub("[ \n]", "", x) }
 #' stopifnot(remove_spacing(xml) == remove_spacing(expected_xml))
-rokogiri <- function(expr, output_type = parent.frame()) {
+rokogiri <- function(expr, output_type = 'xml', enclos = parent.frame()) {
   # Find all variables mentioned in the expression.
   vars <- all.names(substitute(expr))
 
@@ -41,25 +41,44 @@ rokogiri <- function(expr, output_type = parent.frame()) {
   # then this variable will have been overwritten and not give the correct
   # behavior. Even more specifically, we should be able to identify functions
   # that are called with one argument that looks like ({ ... }).
-  vars <- remove_variables_already_defined(vars)
+  vars <- remove_variables_already_defined(vars, envir = enclos)
 
   eval_env <- list2env(
     setNames(replicate(length(vars), node_function), vars),
-    parent = envir
+    parent = enclos
   )
 
   to_xml(eval(substitute(expr), envir = eval_env))
 }
 
-remove_variables_already_defined <- function(vars, envir = parent.frame(2)) {
+remove_variables_already_defined <- function(vars, envir = parent.frame()) {
   Filter(
+    # TODO: (RK) Instead, replace with substitute functions that check
+    # their call expression's first argument for `{`, and if not present,
+    # try a function from further up the environment stack.
     function(var) { !exists(var, envir = envir) },
     unique(vars)
   )
 }
 
 node_function <- function(...) {
+  call_name <- as.character(sys.call()[[1]])
+  dots <- eval(substitute(alist(...)))
 
+  if (length(dots) > 1) {
+    # TODO: (RK) More detailed call stack.
+    stop("rokogiri requires each xml node definition is a function call  with ",
+         "exactly one argument. You provided ", length(dots), " when ",
+         "calling the ", sQuote(call_name), " node.", call. = FALSE)
+  }
+
+  if (length(dots) == 0) {
+    setNames(list(NULL), call_name)
+  } else if (identical(dots[[1]][[1]], as.name("{"))) {
+    setNames(list(...), call_name)
+  } else {
+    eval.parent(dots[[1]])
+  }
 }
 
 to_xml <- base::identity
