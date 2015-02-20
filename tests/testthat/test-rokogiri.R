@@ -16,6 +16,29 @@ test_that('it can produce a simple pre-XML list output', {
   expect_identical(xml, expected_list)
 })
 
+test_that('it can produce a simple pre-XML list output with duplicate entries', {
+  xml <- rokogiri(output_type = 'list', {
+    note({
+      to("Tove")
+      from("Jani")
+      heading("Reminder")
+      msg("Don't forget me this weekend!")
+    })
+
+    note({
+      to("Tove")
+      from("Jani")
+      heading("Reminder")
+      msg("Don't forget me this weekend!")
+    })
+  })
+ 
+  expected_list <- replicate(2, list(note = list(to = "Tove",
+    from = "Jani", heading = "Reminder", msg = "Don't forget me this weekend!")))
+
+  expect_identical(xml, expected_list)
+})
+
 test_that('it can produce a simple example XML', {
   xml <- rokogiri({
     note({
