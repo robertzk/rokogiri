@@ -48,7 +48,7 @@ rokogiri <- function(expr, output_type = 'xml', enclos = parent.frame()) {
     parent = enclos
   )
 
-  to_xml(eval(substitute(expr), envir = eval_env))
+  to_xml(eval(substitute(node_function(expr)), envir = eval_env))
 }
 
 remove_variables_already_defined <- function(vars, envir = parent.frame()) {
@@ -64,6 +64,7 @@ remove_variables_already_defined <- function(vars, envir = parent.frame()) {
 node_function <- function(...) {
   call_name <- as.character(sys.call()[[1]])
   dots <- eval(substitute(alist(...)))
+  eval_env <- list2env(list(`_stack` = list()), parent = parent.frame())
 
   if (length(dots) > 1) {
     # TODO: (RK) More detailed call stack.
@@ -72,12 +73,23 @@ node_function <- function(...) {
          "calling the ", sQuote(call_name), " node.", call. = FALSE)
   }
 
-  if (length(dots) == 0) {
+  is_block <- length(dots) > 0 && identical(dots[[1]][[1]], as.name("{"))
+
+  value <- if (length(dots) == 0) {
     setNames(list(NULL), call_name)
-  } else if (identical(dots[[1]][[1]], as.name("{"))) {
-    setNames(list(...), call_name)
+  } else if (is_block) {
+    eval(dots[[1]], envir = eval_env)
+    setNames(list(eval_env$`_stack`), call_name)
   } else {
-    eval.parent(dots[[1]])
+    setNames(list(eval(dots[[1]], envir = eval_env)), call_name)
+  }
+
+  parent.env(eval_env)$`_stack` <- c(parent.env(eval_env)$`_stack`, value)
+
+  if (is_block) {
+    eval_env$`_stack`
+  } else {
+    value
   }
 }
 
