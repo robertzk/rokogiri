@@ -15,7 +15,7 @@ Imagine we would like to produce the XML output for a CD catalog.
     <artist>Bob Dylan</artist>
     <country>USA</country>
     <company>Columbia</company>
-    <price>10.90</price>
+    <price>10.9</price>
     <year>1985</year>
   </cd>
   <cd>
@@ -23,10 +23,9 @@ Imagine we would like to produce the XML output for a CD catalog.
     <artist>Bonnie Tyler</artist>
     <country>UK</country>
     <company>CBS Records</company>
-    <price>9.90</price>
+    <price>9.9</price>
     <year>1988</year>
   </cd>
-  <cd>
 </catalog>
 ```
 
