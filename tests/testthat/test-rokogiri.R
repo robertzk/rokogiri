@@ -62,3 +62,22 @@ test_that('it can produce a simple example XML', {
   expect_equal(remove_spacing(xml), remove_spacing(expected_xml))
 })
 
+test_that('it can produce a simple example XML with null output', {
+  xml <- rokogiri({
+    note({
+      to("Tove")
+      msg()
+    })
+  })
+ 
+  expected_xml <- "
+    <note>
+      <to>Tove</to>
+      <msg />
+    </note>
+  "
+  
+  remove_spacing <- function(x) { gsub("[ \n]", "", x) }
+  expect_equal(remove_spacing(xml), remove_spacing(expected_xml))
+})
+
