@@ -1,0 +1,47 @@
+<!--
+%\VignetteEngine{rokogiri}
+%\VignetteIndexEntry{Getting started with Rokogiri}
+-->
+
+# Getting started with Rokogiri
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(rokogiri)
+```
+
+Rokogiri is an R package that aims to make it incredibly easy to read
+and write XML files from R. It is written in homage to and spirit of
+the well-known Ruby gem, [Nokogiri](http://www.nokogiri.org/).
+
+To get started with Rokogiri, load up your R console and try the following 
+simple example.
+
+```{r}
+library(rokogiri)
+
+xml <- rokogiri({
+  catalog({
+    cd({
+      tiitle("Empire Burlesque")
+      artist("Bob Dylan")
+      country("USA")
+      company("Columbia")
+      price(10.90)
+      year(1985)
+    })
+
+    cd({
+      tiitle("Hide your heart")
+      artist("Bonnie Tyler")
+      country("UK")
+      company("CBS Records")
+      price(9.90)
+      year(1988)
+    })
+  })
+}) 
+```
+
+As you can see, the output is the appropriate XML. The advantage of using
+Rokogiri over other XML generators is that the code is very readable
+to write; it almost looks like English.

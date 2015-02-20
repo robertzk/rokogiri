@@ -10,6 +10,7 @@ Authors@R: c(person("Robert", "Krzyzanowski",
 Depends:
     R (>= 3.0.1)
 License: MIT
+VignetteBuilder: knitr
 LazyData: true
 Imports:
     stringr
