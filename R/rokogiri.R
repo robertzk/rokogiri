@@ -48,7 +48,13 @@ rokogiri <- function(expr, output_type = 'xml', enclos = parent.frame()) {
     parent = enclos
   )
 
-  to_xml(eval(substitute(node_function(expr)), envir = eval_env))
+  output <- eval(substitute(node_function(expr)), envir = eval_env)
+  
+  if (identical(output_type, "list")) {
+    output
+  } else {
+    to_xml(output)
+  }
 }
 
 remove_variables_already_defined <- function(vars, envir = parent.frame()) {
@@ -93,5 +99,20 @@ node_function <- function(...) {
   }
 }
 
-to_xml <- base::identity
+to_xml <- function(list, nest = 0) {
+  spacing <- paste(collapse = '', replicate(nest, '  '))
+  if (is.atomic(list)) {
+    paste0(spacing, as.character(list))
+  } else if (length(list) == 1 && is.null(list[[1]])) {
+    paste0(spacing, '<', names(list)[1], ' />')
+  } else if (length(list) == 1) {
+    # TODO: (RK) Sanitize XML string output.
+    paste0(spacing, '<', names(list)[1], ">\n", to_xml(list[[1]], nest + 1),
+           "\n", spacing, "</", names(list)[1], '>')
+  } else {
+    paste(collapse = "\n", vapply(seq_along(list), function(i) {
+      to_xml(setNames(base::list(list[[i]]), nm = names(list)[i]), nest)
+    }, character(1)))
+  }
+}
 
