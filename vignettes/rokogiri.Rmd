@@ -16,10 +16,10 @@ the well-known Ruby gem, [Nokogiri](http://www.nokogiri.org/).
 To get started with Rokogiri, load up your R console and try the following 
 simple example.
 
-```{r}
+```{r, eval = TRUE}
 library(rokogiri)
 
-xml <- rokogiri({
+cat(rokogiri({
   catalog({
     cd({
       tiitle("Empire Burlesque")
@@ -39,9 +39,39 @@ xml <- rokogiri({
       year(1988)
     })
   })
-}) 
+}))
 ```
 
 As you can see, the output is the appropriate XML. The advantage of using
 Rokogiri over other XML generators is that the code is very readable
 to write; it almost looks like English.
+
+If you wish to provide your own XML converter, you can also produce
+a list as output.
+
+```{r, eval = TRUE}
+rokogiri(output_type = 'list', {
+  note({
+    to("Tove")
+    from("Jani")
+    heading("Reminder")
+    msg("Don't forget me this weekend!")
+  })
+})
+```
+
+Note that lists in R can share the same name multiple times! This means the list 
+produced will not lose multiple records.
+
+```{r, eval = TRUE}
+output <- rokogiri(output_type = 'list', {
+  note({
+    to("Tove")
+  })
+  note({
+    to("Jim")
+  })
+})
+names(output)
+```
+
