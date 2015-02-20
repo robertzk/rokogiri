@@ -55,3 +55,51 @@ rokogiri({
 }) 
 ```
 
+As you can see, the output is the appropriate XML. The advantage of using
+Rokogiri over other XML generators is that the code is very readable
+to write; it almost looks like English.
+
+If you wish to provide your own XML converter, you can also produce
+a list as output.
+
+```r
+rokogiri(output_type = 'list', {
+  note({
+    to("Tove")
+    from("Jani")
+    heading("Reminder")
+    msg("Don't forget me this weekend!")
+  })
+})
+```
+
+Note that lists in R can share the same name multiple times! This means the list 
+produced will not lose multiple records.
+
+```
+output <- rokogiri(output_type = 'list', {
+  note({
+    to("Tove")
+  })
+  note({
+    to("Jim")
+  })
+})
+stopifnot(names(output) == c("note", "note"))
+```
+
+If you have unorthodox tags in your XML, you can take advantage of another quirk of R.
+Any string surrounded in backticks or quotes can be used as a variable name.
+
+```r
+rokogiri({
+  "what-if-we-need"({
+    "xml-tags"()
+    "like-this"(2)
+  })
+})
+```
+
+The above example also shows that we can leave the argument to the function blank if it is 
+an empty tag, and Rokogiri will produce the trailing slash.
+
