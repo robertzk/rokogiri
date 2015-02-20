@@ -1,3 +1,3 @@
 library("testthat")
-library("package.name")
-test_check("package.name")
+library("rokogiri")
+test_check("rokogiri")

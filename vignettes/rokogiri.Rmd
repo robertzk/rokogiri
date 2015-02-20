@@ -1,41 +1,28 @@
-Rokogiri [![Build Status](https://travis-ci.org/robertzk/rokogiri.svg?branch=master)](https://travis-ci.org/robertzk/rokogiri.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/robertzk/rokogiri/badge.svg?branch=master)](https://coveralls.io/r/robertzk/rokogiri?branch=master)
-==============
+<!--
+%\VignetteEngine{rokogiri}
+%\VignetteIndexEntry{Getting started with Rokogiri}
+-->
 
-An XML generator DSL in R, inspired by Ruby's Nokogiri.
+# Getting started with Rokogiri
 
-Examples
---------
-
-Imagine we would like to produce the XML output for a CD catalog.
-
-```xml
-<catalog>
-  <cd>
-    <title>Empire Burlesque</title>
-    <artist>Bob Dylan</artist>
-    <country>USA</country>
-    <company>Columbia</company>
-    <price>10.9</price>
-    <year>1985</year>
-  </cd>
-  <cd>
-    <title>Hide your heart</title>
-    <artist>Bonnie Tyler</artist>
-    <country>UK</country>
-    <company>CBS Records</company>
-    <price>9.9</price>
-    <year>1988</year>
-  </cd>
-</catalog>
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(rokogiri)
 ```
 
-To generate this file using Rokogiri, we can write the following R code.
+Rokogiri is an R package that aims to make it incredibly easy to read
+and write XML files from R. It is written in homage to and spirit of
+the well-known Ruby gem, [Nokogiri](http://www.nokogiri.org/).
 
-```r
-rokogiri({
+To get started with Rokogiri, load up your R console and try the following 
+simple example.
+
+```{r, eval = TRUE}
+library(rokogiri)
+
+cat(rokogiri({
   catalog({
     cd({
-      title("Empire Burlesque")
+      tiitle("Empire Burlesque")
       artist("Bob Dylan")
       country("USA")
       company("Columbia")
@@ -44,7 +31,7 @@ rokogiri({
     })
 
     cd({
-      title("Hide your heart")
+      tiitle("Hide your heart")
       artist("Bonnie Tyler")
       country("UK")
       company("CBS Records")
@@ -52,7 +39,7 @@ rokogiri({
       year(1988)
     })
   })
-}) 
+}))
 ```
 
 As you can see, the output is the appropriate XML. The advantage of using
@@ -62,7 +49,7 @@ to write; it almost looks like English.
 If you wish to provide your own XML converter, you can also produce
 a list as output.
 
-```r
+```{r, eval = TRUE}
 rokogiri(output_type = 'list', {
   note({
     to("Tove")
@@ -76,7 +63,7 @@ rokogiri(output_type = 'list', {
 Note that lists in R can share the same name multiple times! This means the list 
 produced will not lose multiple records.
 
-```
+```{r, eval = TRUE}
 output <- rokogiri(output_type = 'list', {
   note({
     to("Tove")
@@ -85,21 +72,20 @@ output <- rokogiri(output_type = 'list', {
     to("Jim")
   })
 })
-stopifnot(names(output) == c("note", "note"))
+names(output)
 ```
 
 If you have unorthodox tags in your XML, you can take advantage of another quirk of R.
 Any string surrounded in backticks or quotes can be used as a variable name.
 
-```r
-rokogiri({
+```{r, eval = TRUE}
+cat(rokogiri({
   "what-if-we-need"({
     "xml-tags"()
     "like-this"(2)
   })
-})
+}))
 ```
 
 The above example also shows that we can leave the argument to the function blank if it is 
 an empty tag, and Rokogiri will produce the trailing slash.
-
