@@ -29,7 +29,7 @@ Imagine we would like to produce the XML output for a CD catalog.
 </catalog>
 ```
 
-To generate this file using Nokogiri, we can write the following R code.
+To generate this file using Rokogiri, we can write the following R code.
 
 ```r
 rokogiri({
