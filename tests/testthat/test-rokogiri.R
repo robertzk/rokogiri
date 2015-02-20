@@ -62,6 +62,34 @@ test_that('it can produce a simple example XML', {
   expect_equal(remove_spacing(xml), remove_spacing(expected_xml))
 })
 
+test_that('it can produce a simple example XML with duplicate outputs', {
+  xml <- rokogiri({
+    note({
+      to("Tove")
+      from("Jani")
+    })
+
+    note({
+      to("John")
+      from("Jane")
+    })
+  })
+ 
+  expected_xml <- "
+    <note>
+      <to>Tove</to>
+      <from>Jani</from>
+    </note>
+    <note>
+      <to>John</to>
+      <from>Jane</from>
+    </note>
+  "
+  
+  remove_spacing <- function(x) { gsub("[ \n]", "", x) }
+  expect_equal(remove_spacing(xml), remove_spacing(expected_xml))
+})
+
 test_that('it can produce a simple example XML with null output', {
   xml <- rokogiri({
     note({
@@ -80,4 +108,5 @@ test_that('it can produce a simple example XML with null output', {
   remove_spacing <- function(x) { gsub("[ \n]", "", x) }
   expect_equal(remove_spacing(xml), remove_spacing(expected_xml))
 })
+
 
