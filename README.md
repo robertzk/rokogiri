@@ -3,6 +3,16 @@ Rokogiri [![Build Status](https://travis-ci.org/robertzk/rokogiri.svg?branch=mas
 
 An XML generator DSL in R, inspired by Ruby's Nokogiri.
 
+Installing
+---------
+
+Although Rokogiri is not currently available on [CRAN](http://cran.r-project.org/),
+you can install the developmental version using:
+
+```r
+devtools::install_github('robertzk/rokogiri')
+```
+
 Examples
 --------
 
