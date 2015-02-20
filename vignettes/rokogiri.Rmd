@@ -75,3 +75,17 @@ output <- rokogiri(output_type = 'list', {
 names(output)
 ```
 
+If you have unorthodox tags in your XML, you can take advantage of another quirk of R.
+Any string surrounded in backticks or quotes can be used as a variable name.
+
+```{r, eval = TRUE}
+cat(rokogiri({
+  "what-if-we-need"({
+    "xml-tags"()
+    "like-this"(2)
+  })
+}))
+```
+
+The above example also shows that we can leave the argument to the function blank if it is 
+an empty tag, and Rokogiri will produce the trailing slash.
