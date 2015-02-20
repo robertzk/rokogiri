@@ -6,7 +6,7 @@
 \alias{rokogiri-package}
 \title{An XML generator DSL in R, inspired by Ruby's Nokogiri.}
 \usage{
-rokogiri(expr, output_type)
+rokogiri(expr, output_type = parent.frame())
 }
 \arguments{
 \item{expr}{expression. The R expression to compile to XML.}

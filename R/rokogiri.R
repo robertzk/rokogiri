@@ -41,8 +41,14 @@ rokogiri <- function(expr, output_type = parent.frame()) {
   # then this variable will have been overwritten and not give the correct
   # behavior. Even more specifically, we should be able to identify functions
   # that are called with one argument that looks like ({ ... }).
+  vars <- remove_variables_already_defined(vars)
 
+}
 
-
+remove_variables_already_defined <- function(vars, envir = parent.frame(2)) {
+  Filter(
+    function(var) { !exists(var, envir = envir) },
+    unique(vars)
+  )
 }
 
