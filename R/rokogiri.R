@@ -43,6 +43,12 @@ rokogiri <- function(expr, output_type = parent.frame()) {
   # that are called with one argument that looks like ({ ... }).
   vars <- remove_variables_already_defined(vars)
 
+  eval_env <- list2env(
+    setNames(replicate(length(vars), node_function), vars),
+    parent = envir
+  )
+
+  to_xml(eval(substitute(expr), envir = eval_env))
 }
 
 remove_variables_already_defined <- function(vars, envir = parent.frame(2)) {
@@ -51,4 +57,10 @@ remove_variables_already_defined <- function(vars, envir = parent.frame(2)) {
     unique(vars)
   )
 }
+
+node_function <- function(...) {
+
+}
+
+to_xml <- base::identity
 
