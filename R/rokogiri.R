@@ -7,6 +7,7 @@
 #'    variables mentioned in the XML generation process. By default,
 #'    \code{parent.frame()}.
 #' @return a character string representing the compiled XML.
+#' @export
 #' @examples
 #' xml <- rokogiri({
 #'   note({
