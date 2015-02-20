@@ -45,11 +45,14 @@ rokogiri <- function(expr, output_type = 'xml', enclos = parent.frame()) {
   vars <- remove_variables_already_defined(vars, envir = enclos)
 
   eval_env <- list2env(
-    setNames(replicate(length(vars), node_function), vars),
+    c(
+      setNames(replicate(length(vars), node_function), vars),
+      list(`_node_function` = node_function)
+    ),
     parent = enclos
   )
 
-  output <- eval(substitute(node_function(expr)), envir = eval_env)
+  output <- eval(substitute(`_node_function`(expr)), envir = eval_env)
   
   if (identical(output_type, "list")) {
     output
