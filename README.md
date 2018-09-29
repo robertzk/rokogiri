@@ -113,3 +113,7 @@ rokogiri({
 The above example also shows that we can leave the argument to the function blank if it is 
 an empty tag, and Rokogiri will produce the trailing slash.
 
+License
+--------
+
+This repository is distributed and licensed under the [MIT License](LICENSE).
